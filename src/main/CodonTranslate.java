@@ -140,6 +140,11 @@ public class CodonTranslate {
         return codons;
     }
 
+    public CodonTranslate() {
+        this.dna = "";
+        this.isRNA = false;
+    }
+
     /**
      * Constructor for objects of class CodonTranslate
      * @param dnaString A full DNA string containing codons.
@@ -151,6 +156,18 @@ public class CodonTranslate {
         this.isRNA = rna;
         this.codonList = initialiseCodonList();
 
+    }
+
+    /**
+     * Method to create a translator without using an overloaded constructor.
+     * @param dnaString RNA/DNA string containing codons.
+     * @param rna   Boolean to determine if the string is RNA
+     * @throws IllegalArgumentException If anything is thrown in initialiseCodonList()
+     */
+    public void createTranslator(String dnaString, boolean rna) throws IllegalArgumentException {
+        this.isRNA = rna;
+        this.dna = dnaString;
+        this.codonList = initialiseCodonList();
     }
 
     /**
