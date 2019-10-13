@@ -19,6 +19,7 @@ public class CodonTranslate {
     private static final Map<String, Character> TRANSLATION_TABLE = initialiseMap();
     private String dna;
     private List<String> codonList;
+    private boolean isRNA;
 
     /**
      * A static method that inputs key-value pairs, where the key is a codon and the value is its
@@ -102,6 +103,14 @@ public class CodonTranslate {
      * length of the String is not divisible by three, which implies it is an incomplete DNA string.
      */
     private List<String> initialiseCodonList() throws IllegalArgumentException {
+
+        /* If the strand is DNA, then it must be converted to RNA in order to facilitate
+        translation. Conversion is done by replacing instances of the letter T with the letter U.
+         */
+        if (!isRNA) {
+            dna = dna.replace("T", "U");
+        }
+
         List<String> codons = new LinkedList<>();
         int dnaLength = this.dna.length();
 
@@ -134,10 +143,14 @@ public class CodonTranslate {
     /**
      * Constructor for objects of class CodonTranslate
      * @param dnaString A full DNA string containing codons.
+     * @param rna   If the string is RNA, if it is not then it needs to be converted from DNA to
+     *              RNA.
      */
-    public CodonTranslate(String dnaString) {
+    public CodonTranslate(String dnaString, boolean rna) {
         this.dna = dnaString;
+        this.isRNA = rna;
         this.codonList = initialiseCodonList();
+
     }
 
     /**
@@ -153,7 +166,7 @@ public class CodonTranslate {
      */
     public List<Character> convertToAminoAcid(boolean printToConsole) throws IllegalArgumentException {
         List<Character> aminoAcids = new LinkedList<>();
-
+        int iteration = 0;
         for (String codon : this.codonList) {
 
             /* Checks if the current codon is a stop codon, and if so breaks the loop so as not
@@ -166,11 +179,15 @@ public class CodonTranslate {
             // Initially checks if there is a codon by that name in the table. If there is not
             // then throws an exception to specify that the string is invalid.
             if (!TRANSLATION_TABLE.containsKey(codon)) {
-                throw new IllegalArgumentException("One or more codons in the string are" +
-                        " invalid. Please check the string and try again.");
+                if (codon.equals("ATG")) {
+                    iteration++; // Start codon counts as a valid iteration
+                    System.out.println("DEBUG: START CODON HAS BEEN FOUND ON CODON NUMBER " + iteration);
+                } else
+                throw new IllegalArgumentException("Invalid codon: " + codon);
             } else {
                 char translated = TRANSLATION_TABLE.get(codon);
                 aminoAcids.add(translated);
+                iteration++; // Valid iteration.
             }
         }
 

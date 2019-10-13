@@ -20,7 +20,8 @@ public class CodonTranslateTest {
 
     public static void main(String[] args) {
         CodonTranslate codonTranslate = new CodonTranslate(
-                "AUGGCCAUGGCGCCCAGAACUGAGAUCAAUAGUACCCGUAUUAACGGGUGA");
+                "GACCCAGCAATGACGTATACATGGCTTAAT" +
+                        "GAA", false);
 
         List<Character> bandicootProject = codonTranslate.convertToAminoAcid(true);
     }
